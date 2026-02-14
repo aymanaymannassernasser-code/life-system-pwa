@@ -2,240 +2,305 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Life System RPG</title>
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Almendra&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --parchment: #f4e4bc;
-            --ink: #2c1e16;
-            --iron: #4a4a4a;
-            --gold: #c5a028;
-            --blood: #8b0000;
+            --stone-dark: #1a1a1b;
+            --stone-light: #3c3c3e;
+            --gold: #d4af37;
+            --blood: #a30000;
+            --parchment-text: #e0d1b0;
+            --iron: #707070;
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0;
-            padding: 0;
-            font-family: 'Almendra', serif;
-            background: #1a1a1a;
-            color: var(--ink);
+            background: var(--stone-dark);
+            color: var(--parchment-text);
+            font-family: 'MedievalSharp', cursive;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* The "Parchment" Container */
-        #app-container {
-            background-color: var(--parchment);
-            background-image: url('https://www.transparenttextures.com/patterns/pinstriped-dark.png'); /* Subtle texture */
+        /* Ambient Castle Glow */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Header / Hall Name */
+        header {
+            background: linear-gradient(to bottom, #000, var(--stone-dark));
+            padding: 20px 10px;
+            border-bottom: 3px solid var(--gold);
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+        }
+
+        h1 {
+            font-family: 'UnifrakturMaguntia', serif;
+            font-size: 2.2rem;
+            margin: 0;
+            color: var(--gold);
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        /* Main Viewport */
+        main {
             flex: 1;
-            margin: 10px;
-            border: 8px solid var(--iron);
-            border-image: linear-gradient(to bottom, #4a4a4a, #222) 1;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
             overflow-y: auto;
+            padding: 15px;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png');
+        }
+
+        /* RPG Cards */
+        .hall-card {
+            background: var(--stone-light);
+            border: 2px solid var(--iron);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
             position: relative;
-            display: flex;
-            flex-direction: column;
         }
 
-        h1, h2 { font-family: 'MedievalSharp', cursive; text-align: center; text-transform: uppercase; }
-
-        /* Navigation Bar */
-        nav {
-            display: flex;
-            background: var(--iron);
-            justify-content: space-around;
-            padding: 10px 0;
-            border-top: 2px solid var(--gold);
+        .hall-card::after {
+            content: ""; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px;
+            border: 1px solid rgba(212, 175, 55, 0.2); pointer-events: none;
         }
 
-        nav button {
-            background: none;
-            border: none;
-            color: #ccc;
-            font-family: 'MedievalSharp', cursive;
-            font-size: 0.7rem;
-            cursor: pointer;
-        }
-
-        nav button.active { color: var(--gold); text-decoration: underline; }
-
-        /* Treasury Styles */
-        .tab-content { display: none; padding: 15px; }
-        .tab-content.active { display: block; }
-
-        .stat-card {
-            background: rgba(0,0,0,0.05);
-            border: 1px solid var(--ink);
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-
-        .form-group { margin-bottom: 10px; }
+        /* Inputs & Buttons - Bigger for Mobile */
         input, select {
             width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            background: rgba(255,255,255,0.5);
-            border: 1px solid var(--ink);
-            box-sizing: border-box;
-            font-family: 'Almendra', serif;
+            background: #000;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 1.1rem;
+            font-family: 'MedievalSharp';
         }
 
         .btn-action {
-            background: var(--ink);
-            color: var(--parchment);
+            background: var(--blood);
+            color: white;
+            border: 2px solid var(--gold);
+            padding: 18px;
             width: 100%;
-            padding: 10px;
-            border: none;
-            font-family: 'MedievalSharp', cursive;
-            margin-top: 10px;
+            font-size: 1.2rem;
+            font-family: 'MedievalSharp';
+            text-transform: uppercase;
+            box-shadow: 0 4px 0 #500;
+            transition: transform 0.1s;
         }
 
-        .log-item {
+        .btn-action:active { transform: translateY(3px); box-shadow: 0 1px 0 #500; }
+
+        /* Navigation Bar (The Gateway) */
+        nav {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            background: #000;
+            border-top: 2px solid var(--gold);
+            height: 70px;
+        }
+
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: var(--iron);
+            font-size: 0.6rem;
+            gap: 5px;
+        }
+
+        .nav-btn.active { color: var(--gold); background: rgba(212, 175, 55, 0.1); }
+        .nav-btn i { font-size: 1.5rem; }
+
+        /* Treasury Specifics */
+        .vault-discrepancy {
+            color: #ff4444;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .tab-content { display: none; }
+        .active-content { display: block; }
+        
+        .ledger-row {
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px dashed var(--ink);
-            padding: 5px 0;
-            font-size: 0.9rem;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
-        canvas { max-width: 100%; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div id="app-container">
-    <div id="treasury" class="tab-content active">
-        <h1>The Treasury</h1>
-        
-        <div class="stat-card">
-            <div>Current Hoard: <strong id="total-gold">0.00</strong> Gold</div>
-            <div style="font-size: 0.8rem; opacity: 0.7;">Bank: <span id="bank-val">0</span> | Cash: <span id="cash-val">0</span></div>
-        </div>
+<header>
+    <h1 id="hall-title">Counting House</h1>
+</header>
 
-        <div class="stat-card">
-            <h2>Log New Loot/Tribute</h2>
-            <div class="form-group">
-                <input type="number" id="amount" placeholder="Amount (Gold)">
-                <input type="text" id="note" placeholder="What was the quest?">
-                <select id="category">
-                    <option value="Provisions">Provisions (Food)</option>
-                    <option value="Gear">Gear (Shopping)</option>
-                    <option value="Inn">Inn (Rent/Bills)</option>
-                    <option value="Bounty">Bounty (Income)</option>
-                </select>
-                <button class="btn-action" onclick="addTransaction()">Record in Ledger</button>
+<main id="main-hall">
+    <section id="treasury" class="tab-content active-content">
+        <div class="hall-card">
+            <div style="text-align: center;">
+                <span style="font-size: 0.9rem; color: var(--iron);">TOTAL HOARD</span><br>
+                <span id="total-gold" style="font-size: 2.5rem; color: var(--gold);">0.00</span><br>
+                <span style="font-size: 0.8rem;">Gold Coins</span>
             </div>
         </div>
 
-        <canvas id="treasuryChart"></canvas>
+        <div class="hall-card">
+            <h2 style="margin-top: 0;">Log Loot / Tribute</h2>
+            <input type="number" id="amount" placeholder="Amount (e.g. 20.50)" inputmode="decimal">
+            <input type="text" id="note" placeholder="What quest was this?">
+            <select id="category">
+                <option value="Provisions">🍗 Provisions</option>
+                <option value="Gear">⚔️ Gear</option>
+                <option value="Inn">🛖 Inn / Rent</option>
+                <option value="Taxes">📜 Taxes / Bills</option>
+                <option value="Bounty">💰 Bounty (Income)</option>
+            </select>
+            <button class="btn-action" onclick="recordLoot()">Record in Ledger</button>
+        </div>
 
-        <div id="ledger-list" style="margin-top: 20px;">
-            <h3>Recent Ledger Entries</h3>
+        <div class="hall-card">
+            <h2>The Audit</h2>
+            <input type="number" id="audit-bank" placeholder="Gold in Bank" oninput="checkDiscrepancy()">
+            <input type="number" id="audit-cash" placeholder="Gold in Pouch" oninput="checkDiscrepancy()">
+            <div id="discrepancy-msg" class="vault-discrepancy">⚠️ Goblins are afoot! Ledger doesn't match your pouch.</div>
+        </div>
+
+        <div class="hall-card" style="background: rgba(0,0,0,0.3);">
+            <canvas id="treasuryChart"></canvas>
+        </div>
+
+        <div id="ledger-list" style="padding-bottom: 50px;">
             </div>
-    </div>
+    </section>
 
-    <div id="habits" class="tab-content"><h1>Habit Tracker</h1><p>Daily Rituals go here...</p></div>
-    <div id="gym" class="tab-content"><h1>Training Grounds</h1><p>Physical feats go here...</p></div>
-    <div id="study" class="tab-content"><h1>The Library</h1><p>Ancient wisdom logs...</p></div>
-    <div id="journal" class="tab-content"><h1>The Chronicles</h1><p>Dear Diary...</p></div>
-</div>
+    <section id="rituals" class="tab-content"><h1>Daily Rituals</h1><p>Work in progress...</p></section>
+    <section id="training" class="tab-content"><h1>Training Grounds</h1></section>
+    <section id="library" class="tab-content"><h1>Grand Library</h1></section>
+    <section id="chronicles" class="tab-content"><h1>The Chronicles</h1></section>
+</main>
 
 <nav>
-    <button onclick="showTab('treasury')" class="active">TREASURY</button>
-    <button onclick="showTab('habits')">HABITS</button>
-    <button onclick="showTab('gym')">GYM</button>
-    <button onclick="showTab('study')">STUDY</button>
-    <button onclick="showTab('journal')">JOURNAL</button>
+    <button class="nav-btn active" onclick="enterHall('treasury', 'Counting House', this)">🪙<br>Treasury</button>
+    <button class="nav-btn" onclick="enterHall('rituals', 'Daily Rituals', this)">🕯️<br>Rituals</button>
+    <button class="nav-btn" onclick="enterHall('training', 'Training Grounds', this)">⚔️<br>Gym</button>
+    <button class="nav-btn" onclick="enterHall('library', 'Grand Library', this)">📖<br>Study</button>
+    <button class="nav-btn" onclick="enterHall('chronicles', 'The Chronicles', this)">📜<br>Journal</button>
 </nav>
 
 <script>
-    // --- APP STATE ---
-    let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+    let transactions = JSON.parse(localStorage.getItem('rpg_vault')) || [];
     let myChart = null;
 
-    // --- NAVIGATION ---
-    function showTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
-        if(tabId === 'treasury') updateUI();
+    function enterHall(hallId, title, btn) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-content'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById(hallId).classList.add('active-content');
+        document.getElementById('hall-title').innerText = title;
+        btn.classList.add('active');
+        
+        if(hallId === 'treasury') refreshTreasury();
     }
 
-    // --- TREASURY LOGIC ---
-    function addTransaction() {
-        const amount = document.getElementById('amount').value;
+    function recordLoot() {
+        const amt = document.getElementById('amount').value;
         const note = document.getElementById('note').value;
         const cat = document.getElementById('category').value;
-        
-        if(!amount) return alert("How much gold, traveler?");
 
-        const entry = {
+        if(!amt) return;
+
+        const transaction = {
             id: Date.now(),
-            amount: parseFloat(amount),
-            note: note,
+            amount: parseFloat(amt),
+            note: note || "Unnamed Quest",
             category: cat,
             date: new Date().toLocaleDateString()
         };
 
-        transactions.unshift(entry);
-        localStorage.setItem('transactions', JSON.stringify(transactions));
+        transactions.unshift(transaction);
+        localStorage.setItem('rpg_vault', JSON.stringify(transactions));
         
         document.getElementById('amount').value = '';
         document.getElementById('note').value = '';
-        updateUI();
+        refreshTreasury();
     }
 
-    function updateUI() {
+    function checkDiscrepancy() {
+        const bank = parseFloat(document.getElementById('audit-bank').value) || 0;
+        const cash = parseFloat(document.getElementById('audit-cash').value) || 0;
+        const ledgerTotal = transactions.reduce((acc, t) => acc + t.amount, 0);
+        
+        const msg = document.getElementById('discrepancy-msg');
+        if ((bank + cash) !== ledgerTotal && (bank + cash) !== 0) {
+            msg.style.display = 'block';
+        } else {
+            msg.style.display = 'none';
+        }
+    }
+
+    function refreshTreasury() {
         const list = document.getElementById('ledger-list');
         const totalEl = document.getElementById('total-gold');
-        list.innerHTML = '<h3>Recent Ledger Entries</h3>';
+        list.innerHTML = '<h2 style="text-align:center">The Ledger</h2>';
         
         let total = 0;
-        const totalsByCategory = {};
+        const categories = {};
 
         transactions.forEach(t => {
             total += t.amount;
-            totalsByCategory[t.category] = (totalsByCategory[t.category] || 0) + Math.abs(t.amount);
+            categories[t.category] = (categories[t.category] || 0) + Math.abs(t.amount);
             
-            const item = document.createElement('div');
-            item.className = 'log-item';
-            item.innerHTML = `<span>${t.date} - ${t.note}</span> <strong>${t.amount}g</strong>`;
-            list.appendChild(item);
+            const row = document.createElement('div');
+            row.className = 'ledger-row';
+            row.innerHTML = `<span>${t.note}</span><span style="color:${t.amount >=0 ? 'var(--gold)' : 'var(--blood)'}">${t.amount}g</span>`;
+            list.appendChild(row);
         });
 
         totalEl.innerText = total.toFixed(2);
-        renderChart(totalsByCategory);
+        updateChart(categories);
     }
 
-    function renderChart(data) {
+    function updateChart(data) {
         const ctx = document.getElementById('treasuryChart').getContext('2d');
         if(myChart) myChart.destroy();
-
         myChart = new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 labels: Object.keys(data),
                 datasets: [{
                     data: Object.values(data),
-                    backgroundColor: ['#8b0000', '#c5a028', '#2c1e16', '#4a4a4a']
+                    backgroundColor: ['#d4af37', '#a30000', '#707070', '#3c3c3e', '#1a1a1b'],
+                    borderWidth: 0
                 }]
             },
-            options: { 
-                plugins: { legend: { labels: { color: '#2c1e16', font: { family: 'Almendra' } } } }
-            }
+            options: { plugins: { legend: { labels: { color: '#e0d1b0' } } } }
         });
     }
 
-    // Initialize
-    updateUI();
+    // Run on boot
+    refreshTreasury();
 </script>
 
 </body>
