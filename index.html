@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>يللاااا بيناااا - v2.7</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
+    <title>خلوات - v2.8</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --neon-blue: #00d4ff;
@@ -20,81 +20,83 @@
         body {
             margin: 0; background: var(--deep-dark); color: var(--white);
             font-family: 'Cairo', sans-serif; height: 100vh; overflow: hidden;
+            background-image: radial-gradient(circle at top, #111, #000);
         }
 
-        /* --- البوابة --- */
+        /* --- البوابة (نخش في الموضوع علطول) --- */
         #home-gate {
             position: fixed; inset: 0; background: var(--deep-dark);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 1000; transition: 0.5s ease-in-out;
+            z-index: 1000; transition: 0.6s cubic-bezier(0.19, 1, 0.22, 1);
         }
-        #home-gate.hidden { opacity: 0; visibility: hidden; transform: scale(1.2); }
+        #home-gate.hidden { transform: scale(1.5); opacity: 0; visibility: hidden; }
 
-        .gate-title { font-family: 'Reem Kufi'; font-size: 4rem; color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue); }
-        .hall-grid { display: flex; flex-direction: column; gap: 15px; width: 85%; max-width: 350px; margin-top: 30px; }
+        .gate-title { font-family: 'Reem Kufi'; font-size: 3.5rem; color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue); text-align: center; line-height: 1.2; }
+        .hall-grid { display: flex; flex-direction: column; gap: 15px; width: 85%; max-width: 350px; margin-top: 40px; }
         .gate-btn {
-            background: #111; border: 2px solid var(--electric-purple); padding: 20px; 
-            text-align: center; font-size: 1.4rem; cursor: pointer; border-radius: 15px; color: #fff;
+            background: linear-gradient(45deg, #111, #222); border: 2px solid var(--electric-purple); 
+            padding: 22px; text-align: center; font-size: 1.6rem; cursor: pointer; border-radius: 20px; 
+            color: #fff; font-weight: 900; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
 
         /* --- UI --- */
-        header { padding: 20px; border-bottom: 2px solid var(--neon-blue); display: flex; justify-content: space-between; align-items: center; background: #000; }
-        main { padding: 20px; height: calc(100vh - 180px); overflow-y: auto; }
-        .card { background: #111; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid #222; }
+        header { padding: 25px; border-bottom: 2px solid var(--neon-blue); display: flex; justify-content: space-between; align-items: center; background: #000; }
+        header h1 { font-size: 1.8rem; margin: 0; color: var(--neon-blue); font-weight: 900; }
+        
+        main { padding: 20px; height: calc(100vh - 190px); overflow-y: auto; }
+        .card { background: #0a0a0a; border-radius: 25px; padding: 25px; margin-bottom: 25px; border: 1px solid #1a1a1a; box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
 
-        input {
-            width: 100%; background: #222; border: 2px solid #333; color: #fff; 
-            padding: 15px; margin: 10px 0; border-radius: 12px; font-size: 1.2rem;
+        .balance-label { font-size: 1rem; opacity: 0.6; text-align: center; display: block; }
+        .balance-val { font-size: 4rem; color: var(--money-green); text-align: center; font-weight: 900; margin: 10px 0; }
+
+        input, select {
+            width: 100%; background: #111; border: 2px solid #222; color: #fff; 
+            padding: 18px; margin: 10px 0; border-radius: 15px; font-size: 1.3rem; font-family: 'Cairo';
         }
+        input:focus { border-color: var(--money-green); outline: none; }
 
         .audit-alert {
-            background: var(--hot-pink); color: white; padding: 15px; border-radius: 15px;
+            background: var(--hot-pink); padding: 20px; border-radius: 20px;
             display: none; flex-direction: column; align-items: center; text-align: center;
-            border: 3px solid var(--warning-yellow); animation: shake 0.5s infinite;
+            border: 4px solid var(--warning-yellow); margin-bottom: 20px; animation: pulse 1.5s infinite;
         }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(5px); }
-            50% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-            100% { transform: translateX(0); }
-        }
-
-        /* --- Bottom Tabs --- */
+        /* --- Tabs --- */
         nav {
             position: fixed; bottom: 0; width: 100%; height: 100px;
             display: grid; grid-template-columns: repeat(5, 1fr);
-            background: #000; border-top: 1px solid #333;
+            background: #000; border-top: 2px solid #1a1a1a; padding-bottom: env(safe-area-inset-bottom);
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; font-size: 0.9rem; }
-        .nav-item.active { color: var(--neon-blue); }
-        .nav-item span { font-size: 2rem; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #444; font-weight: 700; transition: 0.3s; }
+        .nav-item.active { color: var(--neon-blue); background: rgba(0, 212, 255, 0.05); }
+        .nav-item span { font-size: 2.2rem; margin-bottom: 2px; }
 
-        .ledger-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #222; }
+        .ledger-row { display: flex; justify-content: space-between; padding: 18px; background: #111; margin-bottom: 12px; border-radius: 15px; border-right: 5px solid var(--money-green); }
+        .ledger-row.out { border-right-color: var(--hot-pink); }
     </style>
 </head>
 <body>
 
 <div id="home-gate">
-    <div class="gate-title">يللاااا بيناااا</div>
+    <div class="gate-title">نخش في الموضوع<br>علطول</div>
     <div class="hall-grid">
-        <div class="gate-btn" onclick="enter('treasury', 'ما تقوم تتطمن على فلوسك')">💸 الفلوس</div>
+        <div class="gate-btn" onclick="enter('treasury', 'مليونير مليونير')">💸 الفلوس</div>
         <div class="gate-btn" onclick="enter('rituals', 'هتحور؟')">🕯️ الأوراد</div>
         <div class="gate-btn" onclick="enter('basa', 'فورمة الساحل')">⚔️ البأس</div>
     </div>
 </div>
 
 <header>
-    <div onclick="exit()" style="font-size: 2rem; cursor: pointer;">🏠</div>
-    <h1 id="htitle">الفلوس</h1>
-    <div id="audit-icon"></div>
+    <div onclick="exit()" style="font-size: 2.2rem; cursor: pointer;">🏘️</div>
+    <h1 id="htitle">مليونير مليونير</h1>
+    <div style="width:30px;"></div>
 </header>
 
 <main>
     <section id="treasury">
-        <div class="card" style="border-color: var(--money-green);">
-            <h3 style="margin-top:0; color: var(--money-green);">العدّة اللي معاك فعلياً</h3>
+        <div class="card" style="border-color: var(--warning-yellow);">
+            <h3 style="margin-top:0; color: var(--warning-yellow); text-align: center;">من أين لك هذا؟ (الجرد)</h3>
             <div style="display: flex; gap: 10px;">
                 <input type="number" id="cash-pocket" placeholder="في جيبك" oninput="doAudit()">
                 <input type="number" id="cash-bank" placeholder="في البنك" oninput="doAudit()">
@@ -102,40 +104,41 @@
         </div>
 
         <div id="timor-alert" class="audit-alert">
-            <h2 style="margin:0;">أنا مش حرامي يا تيمور! 😲</h2>
-            <p id="discrepancy-msg">فيه فرق ضايع وقدره: 0</p>
-            <button onclick="adjustBalance()" style="background: white; border: none; padding: 10px; border-radius: 10px; font-weight: bold;">أنا اللي صرفتهم ونسيت (تعديل)</button>
+            <h2 style="margin:0;">أنا مش حرامي يا تيمور!</h2>
+            <p id="diff-msg">فيه فرق مش متسجل!</p>
+            <button onclick="fixIt()" style="background: #fff; border: none; padding: 12px 20px; border-radius: 12px; font-weight: 900; font-family:'Cairo';">أنا اللي صرفتهم (تعديل)</button>
         </div>
 
         <div class="card">
-            <div style="text-align: center; opacity: 0.7;">المفروض يكون معاك (حسب السجل):</div>
-            <div id="expected-balance" style="font-size: 3rem; color: var(--neon-blue); text-align: center; font-weight: bold;">0.00</div>
+            <span class="balance-label">المفروض يكون معاك:</span>
+            <div id="expected" class="balance-val">0.00</div>
         </div>
 
         <div class="card">
             <input type="number" id="amt" placeholder="المبلغ">
             <input type="text" id="note" placeholder="البيان (صرفته في إيه؟)">
-            <select id="type" style="width:100%; padding:15px; border-radius:12px; background:#222; color:#fff;">
+            <select id="type">
                 <option value="in">💰 دخل (رزق)</option>
                 <option value="out">💸 صرف (طيرتهم)</option>
             </select>
-            <button onclick="saveEntry()" style="width:100%; padding:20px; margin-top:15px; border-radius:15px; background:var(--neon-blue); font-weight:bold; font-size:1.2rem;">تثبيت</button>
+            <button onclick="save()" style="width:100%; padding:22px; border-radius:18px; background:var(--neon-blue); color:#000; font-weight:900; font-size:1.4rem; border:none;">ثبّت يا برنس</button>
         </div>
 
+        <h3 style="margin: 20px 10px; font-weight: 900;">تحت البلاطة (السجل)</h3>
         <div id="list"></div>
     </section>
 </main>
 
 <nav>
-    <div class="nav-item active"><span>💸</span>الفلوس</div>
-    <div class="nav-item"><span>🕯️</span>الأوراد</div>
-    <div class="nav-item"><span>⚔️</span>البأس</div>
+    <div class="nav-item active"><span>💸</span>مليونير</div>
+    <div class="nav-item"><span>🕯️</span>هتحور؟</div>
+    <div class="nav-item"><span>⚔️</span>فورمة</div>
     <div class="nav-item"><span>📖</span>الدحيح</div>
     <div class="nav-item"><span>📜</span>الأثر</div>
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('meme_audit_v2.7')) || [];
+    let db = JSON.parse(localStorage.getItem('millionaire_v2.8')) || [];
 
     function enter(id, title) {
         document.getElementById('home-gate').classList.add('hidden');
@@ -145,7 +148,7 @@
 
     function exit() { document.getElementById('home-gate').classList.remove('hidden'); }
 
-    function saveEntry() {
+    function save() {
         const val = parseFloat(document.getElementById('amt').value);
         if(!val) return;
         db.unshift({
@@ -154,7 +157,7 @@
             n: document.getElementById('note').value || "حاجة كدة",
             d: new Date().getTime()
         });
-        localStorage.setItem('meme_audit_v2.7', JSON.stringify(db));
+        localStorage.setItem('millionaire_v2.8', JSON.stringify(db));
         document.getElementById('amt').value = '';
         refresh();
     }
@@ -166,11 +169,11 @@
         db.forEach(i => {
             expected += (i.t === 'in' ? i.v : -i.v);
             const row = document.createElement('div');
-            row.className = 'ledger-row';
-            row.innerHTML = `<span>${i.n}</span><span style="color:${i.t === 'in' ? 'var(--money-green)' : 'var(--hot-pink)'}">${i.v}</span>`;
+            row.className = `ledger-row ${i.t === 'out' ? 'out' : ''}`;
+            row.innerHTML = `<span>${i.n}</span><span style="font-weight:900;">${i.t === 'in' ? '+' : '-'}${i.v.toLocaleString()}</span>`;
             list.appendChild(row);
         });
-        document.getElementById('expected-balance').innerText = expected.toFixed(2);
+        document.getElementById('expected').innerText = expected.toLocaleString();
         window.currentExpected = expected;
         doAudit();
     }
@@ -178,34 +181,32 @@
     function doAudit() {
         const pocket = parseFloat(document.getElementById('cash-pocket').value) || 0;
         const bank = parseFloat(document.getElementById('cash-bank').value) || 0;
-        const actualTotal = pocket + bank;
+        const actual = pocket + bank;
         const expected = window.currentExpected || 0;
-        const diff = actualTotal - expected;
+        const diff = actual - expected;
 
         const alertBox = document.getElementById('timor-alert');
-        if (actualTotal > 0 && Math.abs(diff) > 0.1) {
+        if (actual > 0 && Math.abs(diff) > 1) {
             alertBox.style.display = 'flex';
-            document.getElementById('discrepancy-msg').innerText = `فيه فرق: ${diff.toFixed(2)} جنيه (يا إما ناسي دخل يا ناسي صرف)`;
+            document.getElementById('diff-msg').innerText = `فيه فرق ${diff.toLocaleString()} جنيه ضايعين!`;
         } else {
             alertBox.style.display = 'none';
         }
     }
 
-    function adjustBalance() {
+    function fixIt() {
         const pocket = parseFloat(document.getElementById('cash-pocket').value) || 0;
         const bank = parseFloat(document.getElementById('cash-bank').value) || 0;
         const diff = (pocket + bank) - window.currentExpected;
-        
         db.unshift({
             v: Math.abs(diff),
             t: diff > 0 ? 'in' : 'out',
             n: "تعديل جرد (أنا مش حرامي يا تيمور)",
             d: new Date().getTime()
         });
-        localStorage.setItem('meme_audit_v2.7', JSON.stringify(db));
+        localStorage.setItem('millionaire_v2.8', JSON.stringify(db));
         refresh();
     }
-
     refresh();
 </script>
 </body>
