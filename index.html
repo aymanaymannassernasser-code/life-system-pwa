@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>خلوات - v2.4</title>
+    <title>خلوات - v2.5</title>
     <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-deep: #050a14; /* أزرق غامق جداً */
-            --indigo-accent: #1c2a42; /* أزرق ملكي */
-            --copper: #e38a42; /* نحاس ساطع */
-            --copper-dark: #8c4a1d; /* نحاس محروق */
-            --paper: #e5d9c5; /* ورق قديم */
-            --ruby: #8b0000; /* أحمر نفقات */
-            --emerald: #006400; /* أخضر أرباح */
+            --bg-deep: #050a14;
+            --indigo-accent: #1c2a42;
+            --copper: #e38a42;
+            --copper-dark: #8c4a1d;
+            --paper: #e5d9c5;
+            --ruby: #a31d1d;
+            --emerald: #2e7d32;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -22,7 +22,6 @@
         body {
             margin: 0; background: var(--bg-deep); color: var(--paper);
             font-family: 'Amiri', serif; height: 100vh; overflow: hidden;
-            /* خلفية هندسية إسلامية خفيفة */
             background-image: url('https://www.transparenttextures.com/patterns/islamic-art.png');
         }
 
@@ -31,28 +30,26 @@
             position: fixed; inset: 0;
             background: radial-gradient(circle at center, var(--indigo-accent) 0%, var(--bg-deep) 100%);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 1000; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000; transition: 0.6s ease-in-out;
         }
-        #home-gate.hidden { opacity: 0; visibility: hidden; transform: scale(1.1); }
+        #home-gate.hidden { opacity: 0; visibility: hidden; transform: scale(1.05); }
 
         .gate-title { 
             font-family: 'Reem Kufi'; font-size: 5rem; 
             color: var(--copper); margin-bottom: 50px;
-            text-shadow: 0 5px 15px rgba(227, 138, 66, 0.4);
         }
 
-        .hall-grid { display: flex; flex-direction: column; gap: 20px; width: 85%; max-width: 320px; }
+        .hall-grid { display: flex; flex-direction: column; gap: 15px; width: 85%; max-width: 320px; }
 
         .gate-btn {
-            border: 2px solid var(--copper-dark); padding: 25px; text-align: center;
+            border: 1px solid var(--copper-dark); padding: 22px; text-align: center;
             font-family: 'Reem Kufi'; font-size: 1.6rem; cursor: pointer;
-            background: rgba(28, 42, 66, 0.8); color: var(--paper);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            background: rgba(28, 42, 66, 0.9); color: var(--paper);
         }
 
         /* --- Header --- */
         header {
-            padding: 20px; border-bottom: 3px solid var(--copper);
+            padding: 20px; border-bottom: 2px solid var(--copper);
             display: flex; justify-content: space-between; align-items: center;
             background: var(--bg-deep);
         }
@@ -62,49 +59,48 @@
         main { padding: 20px; height: calc(100vh - 195px); overflow-y: auto; }
 
         .card { 
-            background: rgba(28, 42, 66, 0.7); border: 1px solid var(--copper-dark); 
-            padding: 25px; margin-bottom: 25px; border-radius: 4px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
+            background: rgba(28, 42, 66, 0.8); border: 1px solid var(--copper-dark); 
+            padding: 25px; margin-bottom: 20px; border-radius: 2px;
         }
 
-        .summary-box { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .sum-item { background: #000; padding: 15px; text-align: center; border-bottom: 2px solid var(--copper); }
+        .summary-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .sum-item { background: rgba(0,0,0,0.3); padding: 12px; text-align: center; border-bottom: 2px solid var(--copper-dark); }
 
         input, select {
             width: 100%; background: #000; border: none; border-bottom: 2px solid var(--copper-dark);
-            color: #fff; padding: 18px; margin: 10px 0; font-family: 'Amiri'; font-size: 1.4rem;
+            color: #fff; padding: 18px; margin: 8px 0; font-family: 'Amiri'; font-size: 1.4rem;
         }
         
         .btn-action {
             background: var(--copper); color: #000; border: none; 
             padding: 20px; width: 100%; font-family: 'Reem Kufi'; 
-            font-size: 1.6rem; font-weight: bold; margin-top: 15px;
+            font-size: 1.6rem; font-weight: bold; margin-top: 10px;
         }
 
-        /* --- Bottom Tabs (Bigger & Visible) --- */
+        /* --- Bottom Tabs (Bigger & Clear) --- */
         nav {
             position: fixed; bottom: 0; width: 100%; height: 100px;
             display: grid; grid-template-columns: repeat(5, 1fr);
-            background: #000; border-top: 3px solid var(--copper);
-            padding-bottom: env(safe-area-inset-bottom); z-index: 500;
+            background: #000; border-top: 2px solid var(--copper);
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
         .nav-item {
             display: flex; flex-direction: column; align-items: center; 
             justify-content: center; font-family: 'Reem Kufi'; 
-            font-size: 1.1rem; color: #5c6b84; gap: 5px;
+            font-size: 1.1rem; color: #5c6b84;
         }
 
         .nav-item.active { color: var(--copper); background: rgba(227, 138, 66, 0.1); }
-        .nav-item span { font-size: 2.2rem; }
+        .nav-item span { font-size: 2.2rem; margin-bottom: 5px; }
 
         /* --- Ledger --- */
         .ledger-row {
-            display: flex; justify-content: space-between; padding: 20px 0;
-            border-bottom: 1px solid rgba(227, 138, 66, 0.2); font-size: 1.4rem;
+            display: flex; justify-content: space-between; padding: 18px 0;
+            border-bottom: 1px solid rgba(227, 138, 66, 0.1); font-size: 1.3rem;
         }
-        .profit { color: var(--emerald); font-weight: bold; }
-        .expense { color: var(--ruby); font-weight: bold; }
+        .profit { color: var(--emerald); font-family: 'Reem Kufi'; }
+        .expense { color: var(--ruby); font-family: 'Reem Kufi'; }
 
         .tab-content { display: none; }
         .active-content { display: block; }
@@ -115,7 +111,7 @@
 <div id="home-gate">
     <div class="gate-title">خَلَوات</div>
     <div class="hall-grid">
-        <div class="gate-btn" onclick="enter('treasury', 'بيت المال')">بيت المال</div>
+        <div class="gate-btn" onclick="enter('treasury', 'رِزقي')">رِزقي</div>
         <div class="gate-btn" onclick="enter('rituals', 'الأوراد')">الأوراد</div>
         <div class="gate-btn" onclick="enter('basa', 'البأس')">البأس</div>
         <div class="gate-btn" onclick="enter('study', 'المطالعات')">المطالعات</div>
@@ -125,48 +121,47 @@
 
 <header>
     <div class="seal-icon" onclick="exit()">⌬</div>
-    <h1 id="htitle">بيت المال</h1>
+    <h1 id="htitle">رِزقي</h1>
     <div style="width:40px;"></div>
 </header>
 
 <main>
     <section id="treasury" class="tab-content active-content">
-        <div class="card" style="text-align: center;">
-            <div style="font-size: 1.2rem; opacity: 0.8;">صافي الذهب</div>
-            <div id="balance" style="font-size: 4.5rem; font-family: 'Reem Kufi'; color: var(--copper);">0.00</div>
+        <div class="card" style="text-align: center; background: linear-gradient(to bottom, var(--indigo-accent), var(--bg-deep));">
+            <div style="font-size: 1.1rem; opacity: 0.7;">ما مَعي الآن</div>
+            <div id="balance" style="font-size: 4.5rem; font-family: 'Reem Kufi'; color: var(--copper); margin: 5px 0;">0.00</div>
             
             <div class="summary-box">
                 <div class="sum-item">
-                    <small>إجمالي الربح</small><br>
+                    <small>الغنيمة (دخل)</small><br>
                     <span id="total-profit" style="color:var(--emerald); font-size: 1.4rem;">0.00</span>
                 </div>
                 <div class="sum-item">
-                    <small>إجمالي النفقة</small><br>
+                    <small>النفقة (صرف)</small><br>
                     <span id="total-expense" style="color:var(--ruby); font-size: 1.4rem;">0.00</span>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <h2 style="font-family: 'Reem Kufi'; color: var(--copper);">تقييد المعاملة</h2>
-            <input type="number" id="amt" placeholder="المقدار الذهبي" inputmode="decimal">
-            <input type="text" id="note" placeholder="بيان المعاملة">
-            <select id="type">
-                <option value="in">➕ ربح (دخل)</option>
-                <option value="out">➖ نفقة (صرف)</option>
-            </select>
-            <select id="cat">
-                <option value="تجارة">📦 تجارة</option>
-                <option value="أرزاق">🍗 أرزاق ومؤن</option>
-                <option value="كسوة">👕 كسوة</option>
-                <option value="ركائب">🐎 ركائب</option>
-                <option value="خبيئة">🗝️ نقل للخبيئة</option>
-            </select>
-            <button class="btn-action" onclick="save()">تثبيت في السجل</button>
+            <input type="number" id="amt" placeholder="المقدار" inputmode="decimal">
+            <input type="text" id="note" placeholder="البيان">
+            <div style="display:flex; gap:10px;">
+                <select id="type" style="flex:1;">
+                    <option value="in">➕ غنيمة</option>
+                    <option value="out">➖ نفقة</option>
+                </select>
+                <select id="cat" style="flex:1;">
+                    <option value="تجارة">📦 تجارة</option>
+                    <option value="أرزاق">🍗 أرزاق</option>
+                    <option value="كسوة">👕 كسوة</option>
+                    <option value="خلوة">🏡 نفقات</option>
+                </select>
+            </div>
+            <button class="btn-action" onclick="save()">تثبيت</button>
         </div>
 
-        <div class="card" style="background: #000;">
-            <h3 style="font-family: 'Reem Kufi'; text-align: center; color: var(--copper);">توزيع النفقات</h3>
+        <div class="card" style="background: #000; border-color: var(--copper);">
             <canvas id="chart"></canvas>
         </div>
 
@@ -180,7 +175,7 @@
 </main>
 
 <nav>
-    <div class="nav-item active" onclick="tab('treasury', 'بيت المال', this)"><span>🪙</span>المال</div>
+    <div class="nav-item active" onclick="tab('treasury', 'رِزقي', this)"><span>🪙</span>رِزقي</div>
     <div class="nav-item" onclick="tab('rituals', 'الأوراد', this)"><span>🕯️</span>الأوراد</div>
     <div class="nav-item" onclick="tab('basa', 'البأس', this)"><span>⚔️</span>البأس</div>
     <div class="nav-item" onclick="tab('study', 'المطالعات', this)"><span>📖</span>المطالعات</div>
@@ -188,7 +183,7 @@
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('khalwat_v2.4')) || [];
+    let db = JSON.parse(localStorage.getItem('khalwat_v2.5')) || [];
     let myChart = null;
 
     function enter(id, title) {
@@ -213,18 +208,17 @@
 
     function save() {
         const val = parseFloat(document.getElementById('amt').value);
-        const type = document.getElementById('type').value;
         if(!val) return;
-
         db.unshift({
             v: val,
-            t: type,
+            t: document.getElementById('type').value,
             n: document.getElementById('note').value || "بلا بيان",
             c: document.getElementById('cat').value,
             d: new Date().toLocaleDateString('ar-EG')
         });
-        localStorage.setItem('khalwat_v2.4', JSON.stringify(db));
+        localStorage.setItem('khalwat_v2.5', JSON.stringify(db));
         document.getElementById('amt').value = '';
+        document.getElementById('note').value = '';
         refresh();
     }
 
@@ -234,25 +228,20 @@
         let balance = 0, income = 0, expense = 0, cats = {};
 
         db.forEach(i => {
-            if(i.t === 'in') {
-                income += i.v;
-                balance += i.v;
-            } else {
-                expense += i.v;
-                balance -= i.v;
+            if(i.t === 'in') { income += i.v; balance += i.v; }
+            else { 
+                expense += i.v; balance -= i.v; 
                 cats[i.c] = (cats[i.c] || 0) + i.v;
             }
-            
             const row = document.createElement('div');
             row.className = 'ledger-row';
-            row.innerHTML = `<span>${i.n} <small>(${i.c})</small></span><span class="${i.t === 'in' ? 'profit' : 'expense'}">${i.t === 'in' ? '+' : '-'}${i.v.toFixed(2)}</span>`;
+            row.innerHTML = `<span>${i.n}</span><span class="${i.t === 'in' ? 'profit' : 'expense'}">${i.t === 'in' ? '+' : '-'}${i.v.toFixed(2)}</span>`;
             list.appendChild(row);
         });
 
         document.getElementById('balance').innerText = balance.toFixed(2);
         document.getElementById('total-profit').innerText = income.toFixed(2);
         document.getElementById('total-expense').innerText = expense.toFixed(2);
-        
         draw(cats);
     }
 
@@ -265,14 +254,13 @@
                 labels: Object.keys(data),
                 datasets: [{ 
                     data: Object.values(data), 
-                    backgroundColor: ['#e38a42','#8b0000','#1c2a42','#5c6b84','#d1c7b7'],
-                    borderWidth: 2, borderColor: '#000'
+                    backgroundColor: ['#e38a42','#8b4a1d','#1c2a42','#a31d1d','#2e7d32'],
+                    borderWidth: 0
                 }]
             },
-            options: { plugins: { legend: { position: 'bottom', labels: { color: '#e5d9c5', font: { family: 'Amiri', size: 14 } } } } }
+            options: { plugins: { legend: { position: 'bottom', labels: { color: '#e5d9c5', font: { family: 'Amiri' } } } } }
         });
     }
-
     refresh();
 </script>
 </body>
