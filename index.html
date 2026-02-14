@@ -8,12 +8,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --stone-dark: #1a1a1b;
-            --stone-light: #3c3c3e;
+            --stone-dark: #121213;
+            --stone-light: #2a2a2c;
             --gold: #d4af37;
-            --blood: #a30000;
-            --parchment-text: #e0d1b0;
-            --iron: #707070;
+            --gold-glow: #ffefad;
+            --blood: #8b0000;
+            --parchment: #e0d1b0;
+            --iron: #555;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -21,98 +22,96 @@
         body {
             margin: 0;
             background: var(--stone-dark);
-            color: var(--parchment-text);
+            color: var(--parchment);
             font-family: 'MedievalSharp', cursive;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            font-size: 18px; /* Base scale up */
         }
 
-        /* Ambient Castle Glow */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        /* Header / Hall Name */
         header {
             background: linear-gradient(to bottom, #000, var(--stone-dark));
-            padding: 20px 10px;
+            padding: 25px 10px;
             border-bottom: 3px solid var(--gold);
             text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.8);
+            z-index: 10;
         }
 
         h1 {
             font-family: 'UnifrakturMaguntia', serif;
-            font-size: 2.2rem;
+            font-size: 2.8rem;
             margin: 0;
             color: var(--gold);
-            text-shadow: 2px 2px 4px #000;
+            text-shadow: 3px 3px 0px #000;
         }
 
-        /* Main Viewport */
         main {
             flex: 1;
             overflow-y: auto;
-            padding: 15px;
-            background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png');
+            padding: 20px;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-brick-wall.png');
         }
 
-        /* RPG Cards */
         .hall-card {
             background: var(--stone-light);
-            border: 2px solid var(--iron);
-            border-radius: 8px;
-            margin-bottom: 20px;
-            padding: 20px;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
-            position: relative;
+            border: 3px solid var(--iron);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
         }
 
-        .hall-card::after {
-            content: ""; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px;
-            border: 1px solid rgba(212, 175, 55, 0.2); pointer-events: none;
-        }
-
-        /* Inputs & Buttons - Bigger for Mobile */
+        /* Inputs - Large & Accessible */
         input, select {
             width: 100%;
             background: #000;
-            border: 1px solid var(--gold);
+            border: 2px solid var(--iron);
             color: var(--gold);
-            padding: 15px;
-            margin: 10px 0;
-            font-size: 1.1rem;
-            font-family: 'MedievalSharp';
-        }
-
-        .btn-action {
-            background: var(--blood);
-            color: white;
-            border: 2px solid var(--gold);
             padding: 18px;
-            width: 100%;
+            margin: 12px 0;
             font-size: 1.2rem;
             font-family: 'MedievalSharp';
-            text-transform: uppercase;
-            box-shadow: 0 4px 0 #500;
-            transition: transform 0.1s;
+            border-radius: 8px;
         }
 
-        .btn-action:active { transform: translateY(3px); box-shadow: 0 1px 0 #500; }
+        input:focus { border-color: var(--gold); outline: none; }
 
-        /* Navigation Bar (The Gateway) */
+        .btn-action {
+            background: linear-gradient(to bottom, var(--blood), #500);
+            color: white;
+            border: 2px solid var(--gold);
+            padding: 20px;
+            width: 100%;
+            font-size: 1.4rem;
+            font-family: 'MedievalSharp';
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+
+        /* SECRET VAULT SECTION */
+        .secret-vault {
+            background: #000;
+            border: 2px dashed var(--gold);
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .vault-hidden { filter: blur(8px); cursor: pointer; }
+
+        /* NAVIGATION - BIGGER & VISIBLE */
         nav {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             background: #000;
-            border-top: 2px solid var(--gold);
-            height: 70px;
+            border-top: 4px solid var(--gold);
+            height: 90px; /* Increased height */
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
         .nav-btn {
@@ -123,30 +122,37 @@
             background: none;
             border: none;
             color: var(--iron);
-            font-size: 0.6rem;
+            font-size: 0.9rem; /* Larger text */
+            font-weight: bold;
             gap: 5px;
+            transition: 0.3s;
         }
 
-        .nav-btn.active { color: var(--gold); background: rgba(212, 175, 55, 0.1); }
-        .nav-btn i { font-size: 1.5rem; }
+        .nav-btn span { font-size: 1.8rem; } /* Icon size */
 
-        /* Treasury Specifics */
-        .vault-discrepancy {
-            color: #ff4444;
-            font-size: 0.9rem;
-            text-align: center;
-            margin-top: 5px;
-            display: none;
+        .nav-btn.active { 
+            color: var(--gold); 
+            background: rgba(212, 175, 55, 0.15); 
+            box-shadow: inset 0 5px 0 var(--gold);
         }
 
-        .tab-content { display: none; }
+        .tab-content { display: none; max-width: 800px; margin: 0 auto; }
         .active-content { display: block; }
-        
+
         .ledger-row {
+            background: rgba(0,0,0,0.2);
+            margin: 5px 0;
+            padding: 15px;
             display: flex;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-radius: 5px;
+            border-left: 4px solid var(--gold);
+        }
+
+        @media (min-width: 768px) {
+            nav { height: 100px; }
+            .nav-btn span { font-size: 2.2rem; }
+            .nav-btn { font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -156,71 +162,74 @@
     <h1 id="hall-title">Counting House</h1>
 </header>
 
-<main id="main-hall">
+<main>
     <section id="treasury" class="tab-content active-content">
         <div class="hall-card">
             <div style="text-align: center;">
-                <span style="font-size: 0.9rem; color: var(--iron);">TOTAL HOARD</span><br>
-                <span id="total-gold" style="font-size: 2.5rem; color: var(--gold);">0.00</span><br>
-                <span style="font-size: 0.8rem;">Gold Coins</span>
+                <span style="color: var(--iron); text-transform: uppercase; letter-spacing: 2px;">Available Hoard</span><br>
+                <span id="total-gold" style="font-size: 3.5rem; color: var(--gold); text-shadow: 0 0 10px rgba(212,175,55,0.4);">0.00</span><br>
+                <span style="font-size: 1rem;">Gold Coins</span>
+            </div>
+
+            <div class="secret-vault">
+                <h3 style="margin:0; color:var(--gold); font-size: 0.8rem;">🗝️ THE SECRET VAULT</h3>
+                <div id="vault-amount" class="vault-hidden" onclick="toggleVault()">0.00 Gold</div>
+                <button onclick="transferToVault()" style="background:none; border:1px solid var(--iron); color:var(--iron); font-size: 0.7rem; margin-top:5px; padding:5px;">Move Loot to Vault</button>
             </div>
         </div>
 
         <div class="hall-card">
-            <h2 style="margin-top: 0;">Log Loot / Tribute</h2>
-            <input type="number" id="amount" placeholder="Amount (e.g. 20.50)" inputmode="decimal">
-            <input type="text" id="note" placeholder="What quest was this?">
+            <h2>Record Transaction</h2>
+            <input type="number" id="amount" placeholder="Gold Amount (e.g. 50)" inputmode="decimal">
+            <input type="text" id="note" placeholder="Quest Description">
             <select id="category">
                 <option value="Provisions">🍗 Provisions</option>
                 <option value="Gear">⚔️ Gear</option>
                 <option value="Inn">🛖 Inn / Rent</option>
-                <option value="Taxes">📜 Taxes / Bills</option>
                 <option value="Bounty">💰 Bounty (Income)</option>
             </select>
-            <button class="btn-action" onclick="recordLoot()">Record in Ledger</button>
+            <button class="btn-action" onclick="recordLoot()">Finalize Entry</button>
         </div>
 
         <div class="hall-card">
             <h2>The Audit</h2>
             <input type="number" id="audit-bank" placeholder="Gold in Bank" oninput="checkDiscrepancy()">
             <input type="number" id="audit-cash" placeholder="Gold in Pouch" oninput="checkDiscrepancy()">
-            <div id="discrepancy-msg" class="vault-discrepancy">⚠️ Goblins are afoot! Ledger doesn't match your pouch.</div>
+            <div id="discrepancy-msg" style="color: #ff4444; display:none; text-align:center; padding-top:10px;">⚠️ Thieves! Your pouch and bank don't match the Ledger.</div>
         </div>
 
-        <div class="hall-card" style="background: rgba(0,0,0,0.3);">
-            <canvas id="treasuryChart"></canvas>
+        <div class="hall-card">
+            <canvas id="treasuryChart" style="max-height: 300px;"></canvas>
         </div>
 
-        <div id="ledger-list" style="padding-bottom: 50px;">
-            </div>
+        <div id="ledger-list" style="padding-bottom: 100px;"></div>
     </section>
 
-    <section id="rituals" class="tab-content"><h1>Daily Rituals</h1><p>Work in progress...</p></section>
+    <section id="rituals" class="tab-content"><h1>Daily Rituals</h1></section>
     <section id="training" class="tab-content"><h1>Training Grounds</h1></section>
     <section id="library" class="tab-content"><h1>Grand Library</h1></section>
     <section id="chronicles" class="tab-content"><h1>The Chronicles</h1></section>
 </main>
 
-<nav>
-    <button class="nav-btn active" onclick="enterHall('treasury', 'Counting House', this)">🪙<br>Treasury</button>
-    <button class="nav-btn" onclick="enterHall('rituals', 'Daily Rituals', this)">🕯️<br>Rituals</button>
-    <button class="nav-btn" onclick="enterHall('training', 'Training Grounds', this)">⚔️<br>Gym</button>
-    <button class="nav-btn" onclick="enterHall('library', 'Grand Library', this)">📖<br>Study</button>
-    <button class="nav-btn" onclick="enterHall('chronicles', 'The Chronicles', this)">📜<br>Journal</button>
+<nav id="bottom-nav">
+    <button class="nav-btn active" onclick="enterHall('treasury', 'Counting House', this)"><span>🪙</span>Treasury</button>
+    <button class="nav-btn" onclick="enterHall('rituals', 'Daily Rituals', this)"><span>🕯️</span>Rituals</button>
+    <button class="nav-btn" onclick="enterHall('training', 'Training Grounds', this)"><span>⚔️</span>Gym</button>
+    <button class="nav-btn" onclick="enterHall('library', 'Grand Library', this)"><span>📖</span>Study</button>
+    <button class="nav-btn" onclick="enterHall('chronicles', 'The Chronicles', this)"><span>📜</span>Journal</button>
 </nav>
 
 <script>
-    let transactions = JSON.parse(localStorage.getItem('rpg_vault')) || [];
+    let transactions = JSON.parse(localStorage.getItem('rpg_vault_v1.6')) || [];
+    let secretVaultGold = parseFloat(localStorage.getItem('secret_vault_v1.6')) || 0;
     let myChart = null;
 
     function enterHall(hallId, title, btn) {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-content'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        
         document.getElementById(hallId).classList.add('active-content');
         document.getElementById('hall-title').innerText = title;
         btn.classList.add('active');
-        
         if(hallId === 'treasury') refreshTreasury();
     }
 
@@ -228,57 +237,72 @@
         const amt = document.getElementById('amount').value;
         const note = document.getElementById('note').value;
         const cat = document.getElementById('category').value;
-
         if(!amt) return;
 
-        const transaction = {
+        transactions.unshift({
             id: Date.now(),
             amount: parseFloat(amt),
-            note: note || "Unnamed Quest",
+            note: note || "Mysterious Quest",
             category: cat,
             date: new Date().toLocaleDateString()
-        };
-
-        transactions.unshift(transaction);
-        localStorage.setItem('rpg_vault', JSON.stringify(transactions));
+        });
         
+        saveData();
         document.getElementById('amount').value = '';
         document.getElementById('note').value = '';
         refreshTreasury();
+    }
+
+    function transferToVault() {
+        const amount = prompt("How much gold will you hide in the Secret Vault?");
+        const val = parseFloat(amount);
+        if(isNaN(val) || val <= 0) return;
+
+        // Create a negative transaction in the main ledger
+        transactions.unshift({
+            id: Date.now(),
+            amount: -val,
+            note: "Moved to Secret Vault",
+            category: "Vault",
+            date: new Date().toLocaleDateString()
+        });
+
+        secretVaultGold += val;
+        saveData();
+        refreshTreasury();
+    }
+
+    function toggleVault() {
+        const el = document.getElementById('vault-amount');
+        el.classList.toggle('vault-hidden');
+        el.innerText = secretVaultGold.toFixed(2) + " Gold";
     }
 
     function checkDiscrepancy() {
         const bank = parseFloat(document.getElementById('audit-bank').value) || 0;
         const cash = parseFloat(document.getElementById('audit-cash').value) || 0;
         const ledgerTotal = transactions.reduce((acc, t) => acc + t.amount, 0);
-        
-        const msg = document.getElementById('discrepancy-msg');
-        if ((bank + cash) !== ledgerTotal && (bank + cash) !== 0) {
-            msg.style.display = 'block';
-        } else {
-            msg.style.display = 'none';
-        }
+        document.getElementById('discrepancy-msg').style.display = 
+            (Math.abs((bank + cash) - ledgerTotal) > 0.01 && (bank + cash) > 0) ? 'block' : 'none';
     }
 
     function refreshTreasury() {
         const list = document.getElementById('ledger-list');
-        const totalEl = document.getElementById('total-gold');
-        list.innerHTML = '<h2 style="text-align:center">The Ledger</h2>';
-        
+        list.innerHTML = '<h2>Recent Ledger Entries</h2>';
         let total = 0;
         const categories = {};
 
         transactions.forEach(t => {
             total += t.amount;
-            categories[t.category] = (categories[t.category] || 0) + Math.abs(t.amount);
-            
+            if(t.amount < 0) categories[t.category] = (categories[t.category] || 0) + Math.abs(t.amount);
             const row = document.createElement('div');
             row.className = 'ledger-row';
-            row.innerHTML = `<span>${t.note}</span><span style="color:${t.amount >=0 ? 'var(--gold)' : 'var(--blood)'}">${t.amount}g</span>`;
+            row.innerHTML = `<span>${t.note}</span><span style="color:${t.amount >= 0 ? 'var(--gold)' : 'var(--blood)'}">${t.amount.toFixed(2)}g</span>`;
             list.appendChild(row);
         });
 
-        totalEl.innerText = total.toFixed(2);
+        document.getElementById('total-gold').innerText = total.toFixed(2);
+        document.getElementById('vault-amount').innerText = secretVaultGold.toFixed(2) + " Gold";
         updateChart(categories);
     }
 
@@ -291,17 +315,20 @@
                 labels: Object.keys(data),
                 datasets: [{
                     data: Object.values(data),
-                    backgroundColor: ['#d4af37', '#a30000', '#707070', '#3c3c3e', '#1a1a1b'],
+                    backgroundColor: ['#d4af37', '#8b0000', '#555', '#2a2a2c', '#121213'],
                     borderWidth: 0
                 }]
             },
-            options: { plugins: { legend: { labels: { color: '#e0d1b0' } } } }
+            options: { plugins: { legend: { labels: { color: '#e0d1b0', font: { size: 14 } } } } }
         });
     }
 
-    // Run on boot
+    function saveData() {
+        localStorage.setItem('rpg_vault_v1.6', JSON.stringify(transactions));
+        localStorage.setItem('secret_vault_v1.6', secretVaultGold.toString());
+    }
+
     refreshTreasury();
 </script>
-
 </body>
 </html>
