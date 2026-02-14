@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>حصن الذات - v1.8</title>
-    <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;700&family=Amiri:wght@400;700&family=Zeyada&display=swap" rel="stylesheet">
+    <title>حصن المماليك - v1.9</title>
+    <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --deep-stone: #0f0f0f;
-            --stone-wall: #252526;
-            --gold-leaf: #b8860b;
-            --blood-ruby: #660000;
-            --parchment-ink: #d1bfa7;
-            --iron: #3d3d3d;
+            --deep-ebony: #0a0a0a;
+            --stone-grey: #222222;
+            --mamluk-gold: #c2a05d;
+            --cairo-red: #7b1113;
+            --parchment: #d9c5a3;
+            --iron: #444;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             margin: 0;
-            background: var(--deep-stone);
-            color: var(--parchment-ink);
+            background: var(--deep-ebony);
+            color: var(--parchment);
             font-family: 'Amiri', serif;
             height: 100vh;
             overflow: hidden;
@@ -31,108 +31,116 @@
         #castle-gate {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle, #252526 0%, #000 100%);
+            background-color: var(--deep-ebony);
+            background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png');
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 100;
-            transition: transform 0.6s ease-in-out;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 20px;
         }
 
-        #castle-gate.opened { transform: translateY(-100%); }
+        #castle-gate.opened { transform: scale(1.2); opacity: 0; pointer-events: none; }
 
         .gate-title {
             font-family: 'Reem Kufi', sans-serif;
-            font-size: 3rem;
-            color: var(--gold-leaf);
+            font-size: 2.8rem;
+            color: var(--mamluk-gold);
             text-align: center;
-            margin-bottom: 40px;
-            text-shadow: 0 0 15px rgba(184, 134, 11, 0.5);
+            margin-bottom: 30px;
+            letter-spacing: 1px;
         }
 
         .hall-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
         }
 
         .gate-btn {
-            background: var(--stone-wall);
-            border: 1px solid var(--gold-leaf);
-            color: var(--parchment-ink);
-            padding: 20px 10px;
+            background: var(--stone-grey);
+            border: 1px solid var(--mamluk-gold);
+            color: var(--parchment);
+            padding: 18px 5px;
             font-family: 'Reem Kufi';
-            font-size: 1.1rem;
-            border-radius: 4px;
+            font-size: 1rem;
+            border-radius: 2px;
             cursor: pointer;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.7);
         }
 
-        /* --- MAIN INTERIOR --- */
+        /* --- INTERIOR --- */
         header {
             background: #000;
-            padding: 15px;
-            border-bottom: 2px solid var(--gold-leaf);
+            padding: 12px 20px;
+            border-bottom: 2px solid var(--mamluk-gold);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        h1 { font-family: 'Reem Kufi'; font-size: 1.5rem; margin: 0; color: var(--gold-leaf); }
+        header h1 { font-family: 'Reem Kufi'; font-size: 1.3rem; margin: 0; color: var(--mamluk-gold); }
+
+        /* The Mashrabiya / Window Icon */
+        .icon-gate {
+            font-size: 1.6rem;
+            cursor: pointer;
+            filter: sepia(1) saturate(2) hue-rotate(-10deg);
+        }
 
         main {
             flex: 1;
             overflow-y: auto;
             padding: 15px;
             height: calc(100vh - 140px);
-            background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
         }
 
         .hall-card {
-            background: var(--stone-wall);
-            border-right: 3px solid var(--gold-leaf);
-            padding: 15px;
-            margin-bottom: 20px;
+            background: rgba(34, 34, 34, 0.8);
+            border: 1px solid var(--iron);
+            padding: 18px;
+            margin-bottom: 15px;
             border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
         }
 
-        /* Forms */
         input, select {
             width: 100%;
-            background: #000;
+            background: #111;
             border: 1px solid var(--iron);
-            color: var(--gold-leaf);
+            color: var(--mamluk-gold);
             padding: 12px;
             margin: 8px 0;
             font-family: 'Amiri';
-            border-radius: 4px;
+            font-size: 1rem;
         }
 
         .btn-action {
-            background: var(--blood-ruby);
+            background: var(--cairo-red);
             color: white;
-            border: 1px solid var(--gold-leaf);
-            padding: 15px;
+            border: 1px solid var(--mamluk-gold);
+            padding: 14px;
             width: 100%;
             font-family: 'Reem Kufi';
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-top: 10px;
         }
 
-        /* Ledger Row */
+        /* Clean Ledger - Reem Kufi for numbers, Amiri for text */
         .ledger-row {
-            font-family: 'Zeyada', cursive;
-            font-size: 1.4rem; /* Handwriting is usually smaller, so bumped up */
             display: flex;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(209, 191, 167, 0.1);
-            padding: 8px 0;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 1rem;
         }
+
+        .ledger-row strong { font-family: 'Reem Kufi'; color: var(--mamluk-gold); }
 
         nav {
             position: fixed;
@@ -140,27 +148,28 @@
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             background: #000;
-            height: 70px;
-            border-top: 2px solid var(--gold-leaf);
+            height: 75px;
+            border-top: 2px solid var(--mamluk-gold);
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
         .nav-btn {
-            background: none; border: none; color: var(--iron);
-            font-family: 'Reem Kufi'; font-size: 0.8rem;
+            background: none; border: none; color: #666;
+            font-family: 'Reem Kufi'; font-size: 0.75rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
-        .nav-btn.active { color: var(--gold-leaf); }
+        .nav-btn.active { color: var(--mamluk-gold); }
 
-        .tab-content { display: none; }
+        .tab-content { display: none; max-width: 600px; margin: 0 auto; }
         .active-content { display: block; }
 
         .vault-box {
-            background: rgba(0,0,0,0.5);
-            padding: 10px;
-            border: 1px dashed var(--gold-leaf);
+            background: #000;
+            padding: 15px;
+            border: 1px solid var(--mamluk-gold);
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
         }
     </style>
 </head>
@@ -169,86 +178,81 @@
 <div id="castle-gate">
     <div class="gate-title">حصن الذات</div>
     <div class="hall-grid">
-        <div class="gate-btn" onclick="enterFromGate('treasury', 'ديوان الاستيفاء')">🪙 ديوان الاستيفاء</div>
-        <div class="gate-btn" onclick="enterFromGate('rituals', 'رياضة النفس')">🕯️ رياضة النفس</div>
-        <div class="gate-btn" onclick="enterFromGate('training', 'ميدان الفروسية')">⚔️ ميدان الفروسية</div>
-        <div class="gate-btn" onclick="enterFromGate('library', 'خزانة الكتب')">📖 خزانة الكتب</div>
-        <div class="gate-btn" onclick="enterFromGate('chronicles', 'عرض حال')">📜 عرض حال</div>
+        <div class="gate-btn" onclick="openGate('treasury', 'بيت المال')">🪙 بيت المال</div>
+        <div class="gate-btn" onclick="openGate('rituals', 'تهذيب النفس')">🕯️ تهذيب النفس</div>
+        <div class="gate-btn" onclick="openGate('training', 'ساحة الفرسان')">⚔️ ساحة الفرسان</div>
+        <div class="gate-btn" onclick="openGate('library', 'رواق العلم')">📖 رواق العلم</div>
+        <div class="gate-btn" onclick="openGate('chronicles', 'مفكرة الأيام')">📜 مفكرة الأيام</div>
     </div>
-    <p style="margin-top: 30px; font-size: 0.8rem; opacity: 0.5;">انقر لدخول القلعة</p>
 </div>
 
 <header>
-    <button onclick="backToGate()" style="background:none; border:none; color:var(--gold-leaf); font-size:1.5rem;">🏰</button>
-    <h1 id="hall-title">ديوان الاستيفاء</h1>
+    <div class="icon-gate" onclick="closeGate()">🪟</div> <h1 id="hall-title">بيت المال</h1>
     <div style="width:30px;"></div>
 </header>
 
 <main>
     <section id="treasury" class="tab-content active-content">
         <div class="hall-card" style="text-align: center;">
-            <span style="font-size: 0.9rem; opacity: 0.7;">مجموع الدنانير في الخزانة</span><br>
-            <span id="total-gold" style="font-size: 2.5rem; color: var(--gold-leaf); font-family: 'Reem Kufi';">0.00</span>
+            <span style="font-size: 0.8rem; opacity: 0.6;">إجمالي الذهب المتاح</span><br>
+            <span id="total-gold" style="font-size: 2.8rem; color: var(--mamluk-gold); font-family: 'Reem Kufi';">0.00</span>
             
             <div class="vault-box">
-                <span style="font-size: 0.7rem; color: var(--gold-leaf);">الخزنة السلطانية</span><br>
-                <span id="vault-amount" style="filter: blur(5px);" onclick="this.style.filter='none'">0.00</span>
-                <br>
-                <button onclick="transferToVault()" style="background:none; border:1px solid var(--iron); color:var(--parchment-ink); font-size:0.6rem; margin-top:5px;">إيداع في السر</button>
+                <span style="font-size: 0.8rem; color: var(--mamluk-gold);">🗝️ الخبيئة السلطانية</span><br>
+                <span id="vault-amount" style="filter: blur(8px); display:block; margin: 10px 0;" onclick="this.style.filter='none'">0.00</span>
+                <button onclick="transferToVault()" style="background:none; border:1px solid var(--iron); color:var(--parchment); font-size:0.7rem; padding: 5px 10px;">نقل للخبيئة</button>
             </div>
         </div>
 
         <div class="hall-card">
-            <h2 style="font-family: 'Reem Kufi'; font-size: 1.1rem;">تدوين المعاملات</h2>
-            <input type="number" id="amount" placeholder="المبلغ بالذهب" inputmode="decimal">
-            <input type="text" id="note" placeholder="بيان المعاملة">
+            <h2 style="font-family: 'Reem Kufi'; font-size: 1.1rem; margin-top:0;">تقييد معاملة</h2>
+            <input type="number" id="amount" placeholder="المبلغ الذهبي" inputmode="decimal">
+            <input type="text" id="note" placeholder="بيان النفقة أو الغنيمة">
             <select id="category">
                 <option value="Provisions">🍗 الأرزاق</option>
                 <option value="Gear">⚔️ العتاد</option>
                 <option value="Inn">🛖 النزل</option>
                 <option value="Bounty">💰 الغنائم</option>
             </select>
-            <button class="btn-action" onclick="recordLoot()">تثبيت في الديوان</button>
+            <button class="btn-action" onclick="recordLoot()">تثبيت المعاملة</button>
         </div>
 
-        <div class="hall-card">
-            <canvas id="treasuryChart" style="max-height: 200px;"></canvas>
+        <div class="hall-card" style="background: #111;">
+            <canvas id="treasuryChart" style="max-height: 220px;"></canvas>
         </div>
 
         <div id="ledger-list" style="padding-bottom: 80px;"></div>
     </section>
 
-    <section id="rituals" class="tab-content"><h2 style="text-align:center;">رياضة النفس</h2></section>
-    <section id="training" class="tab-content"><h2 style="text-align:center;">ميدان الفروسية</h2></section>
-    <section id="library" class="tab-content"><h2 style="text-align:center;">خزانة الكتب</h2></section>
-    <section id="chronicles" class="tab-content"><h2 style="text-align:center;">عرض حال</h2></section>
+    <section id="rituals" class="tab-content"><h2>تهذيب النفس</h2></section>
+    <section id="training" class="tab-content"><h2>ساحة الفرسان</h2></section>
+    <section id="library" class="tab-content"><h2>رواق العلم</h2></section>
+    <section id="chronicles" class="tab-content"><h2>مفكرة الأيام</h2></section>
 </main>
 
-<nav id="bottom-nav">
-    <button class="nav-btn active" onclick="enterHall('treasury', 'ديوان الاستيفاء', this)">🪙<br>الديوان</button>
-    <button class="nav-btn" onclick="enterHall('rituals', 'رياضة النفس', this)">🕯️<br>الرياضة</button>
-    <button class="nav-btn" onclick="enterHall('training', 'ميدان الفروسية', this)">⚔️<br>الميدان</button>
-    <button class="nav-btn" onclick="enterHall('library', 'خزانة الكتب', this)">📖<br>الكتب</button>
-    <button class="nav-btn" onclick="enterHall('chronicles', 'عرض حال', this)">📜<br>السجل</button>
+<nav>
+    <button class="nav-btn active" onclick="switchHall('treasury', 'بيت المال', this)">🪙<br>المال</button>
+    <button class="nav-btn" onclick="switchHall('rituals', 'تهذيب النفس', this)">🕯️<br>النفس</button>
+    <button class="nav-btn" onclick="switchHall('training', 'ساحة الفرسان', this)">⚔️<br>الميدان</button>
+    <button class="nav-btn" onclick="switchHall('library', 'رواق العلم', this)">📖<br>الرواق</button>
+    <button class="nav-btn" onclick="switchHall('chronicles', 'مفكرة الأيام', this)">📜<br>الأيام</button>
 </nav>
 
 <script>
-    let transactions = JSON.parse(localStorage.getItem('rpg_vault_v1.8')) || [];
-    let vaultGold = parseFloat(localStorage.getItem('rpg_secret_v1.8')) || 0;
+    let transactions = JSON.parse(localStorage.getItem('mamluk_vault_v1.9')) || [];
+    let vaultGold = parseFloat(localStorage.getItem('mamluk_secret_v1.9')) || 0;
     let myChart = null;
 
-    function enterFromGate(hallId, title) {
+    function openGate(hallId, title) {
         document.getElementById('castle-gate').classList.add('opened');
-        const btns = document.querySelectorAll('.nav-btn');
-        let targetBtn = Array.from(btns).find(b => b.innerText.includes(title.split(' ')[0]));
-        enterHall(hallId, title, targetBtn);
+        switchHall(hallId, title);
     }
 
-    function backToGate() {
+    function closeGate() {
         document.getElementById('castle-gate').classList.remove('opened');
     }
 
-    function enterHall(hallId, title, btn) {
+    function switchHall(hallId, title, btn) {
         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-content'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(hallId).classList.add('active-content');
@@ -274,9 +278,9 @@
     }
 
     function transferToVault() {
-        const amt = parseFloat(prompt("ما مقدار الذهب المراد نقله للخزانة السلطانية؟"));
+        const amt = parseFloat(prompt("ما مقدار الذهب المراد نقله للخبيئة؟"));
         if(!amt) return;
-        transactions.unshift({ id: Date.now(), amount: -amt, note: "نقل للخزانة السرية", category: "Vault" });
+        transactions.unshift({ id: Date.now(), amount: -amt, note: "نقل للخبيئة السلطانية", category: "Vault" });
         vaultGold += amt;
         save();
         refreshTreasury();
@@ -284,7 +288,7 @@
 
     function refreshTreasury() {
         const list = document.getElementById('ledger-list');
-        list.innerHTML = '<h3 style="text-align:center; font-family: Reem Kufi;">دفتر الحسابات</h3>';
+        list.innerHTML = '<h3 style="text-align:center; font-family: Reem Kufi; color:var(--mamluk-gold);">سجل الدواوين</h3>';
         let total = 0;
         let cats = {};
         transactions.forEach(t => {
@@ -292,7 +296,7 @@
             if(t.amount < 0) cats[t.category] = (cats[t.category] || 0) + Math.abs(t.amount);
             const row = document.createElement('div');
             row.className = 'ledger-row';
-            row.innerHTML = `<span>${t.note}</span><span style="color:${t.amount >=0 ? 'var(--gold-leaf)' : 'var(--blood-ruby)'}">${t.amount.toFixed(2)}</span>`;
+            row.innerHTML = `<span>${t.note}</span><strong>${t.amount.toFixed(2)}</strong>`;
             list.appendChild(row);
         });
         document.getElementById('total-gold').innerText = total.toFixed(2);
@@ -307,15 +311,15 @@
             type: 'pie',
             data: {
                 labels: Object.keys(data),
-                datasets: [{ data: Object.values(data), backgroundColor: ['#b8860b','#660000','#3d3d3d','#252526'], borderWidth: 0 }]
+                datasets: [{ data: Object.values(data), backgroundColor: ['#c2a05d','#7b1113','#444','#222'], borderWidth: 0 }]
             },
-            options: { plugins: { legend: { labels: { color: '#d1bfa7', font: { family: 'Amiri' } } } } }
+            options: { plugins: { legend: { labels: { color: '#d9c5a3', font: { family: 'Amiri' } } } } }
         });
     }
 
     function save() {
-        localStorage.setItem('rpg_vault_v1.8', JSON.stringify(transactions));
-        localStorage.setItem('rpg_secret_v1.8', vaultGold.toString());
+        localStorage.setItem('mamluk_vault_v1.9', JSON.stringify(transactions));
+        localStorage.setItem('mamluk_secret_v1.9', vaultGold.toString());
     }
 
     refreshTreasury();
