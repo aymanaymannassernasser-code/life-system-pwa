@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>يللاااا بيناااا - v2.6</title>
-    <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>يللاااا بيناااا - v2.7</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Reem+Kufi:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
             --neon-blue: #00d4ff;
@@ -13,92 +12,66 @@
             --electric-purple: #9d00ff;
             --money-green: #00ff88;
             --hot-pink: #ff0055;
+            --warning-yellow: #ffcc00;
             --white: #ffffff;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
         body {
             margin: 0; background: var(--deep-dark); color: var(--white);
             font-family: 'Cairo', sans-serif; height: 100vh; overflow: hidden;
-            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
         }
 
-        /* --- البوابة (Home) --- */
+        /* --- البوابة --- */
         #home-gate {
-            position: fixed; inset: 0;
-            background: var(--deep-dark);
+            position: fixed; inset: 0; background: var(--deep-dark);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 1000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000; transition: 0.5s ease-in-out;
         }
-        #home-gate.hidden { transform: translateY(-100%) rotate(5deg); opacity: 0; }
+        #home-gate.hidden { opacity: 0; visibility: hidden; transform: scale(1.2); }
 
-        .gate-title { 
-            font-family: 'Reem Kufi'; font-size: 4rem; 
-            color: var(--neon-blue); margin-bottom: 40px;
-            text-shadow: 0 0 20px var(--neon-blue);
-            text-align: center;
-        }
-
-        .hall-grid { display: flex; flex-direction: column; gap: 15px; width: 85%; max-width: 350px; }
-
+        .gate-title { font-family: 'Reem Kufi'; font-size: 4rem; color: var(--neon-blue); text-shadow: 0 0 20px var(--neon-blue); }
+        .hall-grid { display: flex; flex-direction: column; gap: 15px; width: 85%; max-width: 350px; margin-top: 30px; }
         .gate-btn {
             background: #111; border: 2px solid var(--electric-purple); padding: 20px; 
-            text-align: center; font-size: 1.4rem; cursor: pointer; border-radius: 15px;
-            color: var(--white); font-weight: bold;
-            box-shadow: 0 5px 15px rgba(157, 0, 255, 0.2);
+            text-align: center; font-size: 1.4rem; cursor: pointer; border-radius: 15px; color: #fff;
         }
 
         /* --- UI --- */
-        header {
-            padding: 20px; border-bottom: 2px solid var(--neon-blue);
-            display: flex; justify-content: space-between; align-items: center;
-            background: #000;
-        }
-        header h1 { font-size: 1.5rem; margin: 0; color: var(--neon-blue); }
-
+        header { padding: 20px; border-bottom: 2px solid var(--neon-blue); display: flex; justify-content: space-between; align-items: center; background: #000; }
         main { padding: 20px; height: calc(100vh - 180px); overflow-y: auto; }
+        .card { background: #111; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid #222; }
 
-        .card { 
-            background: #111; border-radius: 20px; padding: 25px; 
-            margin-bottom: 20px; border: 1px solid #222;
+        input {
+            width: 100%; background: #222; border: 2px solid #333; color: #fff; 
+            padding: 15px; margin: 10px 0; border-radius: 12px; font-size: 1.2rem;
         }
 
-        .balance-text { font-size: 4rem; color: var(--money-green); text-align: center; font-weight: 700; margin: 10px 0; }
-
-        input, select {
-            width: 100%; background: #222; border: 2px solid #333; 
-            color: #fff; padding: 18px; margin: 10px 0; border-radius: 12px;
-            font-size: 1.2rem; outline: none;
-        }
-        input:focus { border-color: var(--neon-blue); }
-        
-        .btn-add {
-            background: var(--neon-blue); color: #000; border: none; 
-            padding: 20px; width: 100%; border-radius: 15px;
-            font-size: 1.4rem; font-weight: bold; cursor: pointer;
+        .audit-alert {
+            background: var(--hot-pink); color: white; padding: 15px; border-radius: 15px;
+            display: none; flex-direction: column; align-items: center; text-align: center;
+            border: 3px solid var(--warning-yellow); animation: shake 0.5s infinite;
         }
 
-        /* --- Tabs --- */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(5px); }
+            50% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* --- Bottom Tabs --- */
         nav {
-            position: fixed; bottom: 0; width: 100%; height: 95px;
+            position: fixed; bottom: 0; width: 100%; height: 100px;
             display: grid; grid-template-columns: repeat(5, 1fr);
             background: #000; border-top: 1px solid #333;
-            padding-bottom: env(safe-area-inset-bottom);
         }
-
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; font-size: 0.8rem; color: #555;
-        }
-
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; font-size: 0.9rem; }
         .nav-item.active { color: var(--neon-blue); }
-        .nav-item span { font-size: 1.8rem; margin-bottom: 5px; }
+        .nav-item span { font-size: 2rem; }
 
-        .ledger-row {
-            display: flex; justify-content: space-between; padding: 15px;
-            background: #1a1a1a; margin-bottom: 10px; border-radius: 10px;
-        }
+        .ledger-row { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #222; }
     </style>
 </head>
 <body>
@@ -109,102 +82,130 @@
         <div class="gate-btn" onclick="enter('treasury', 'ما تقوم تتطمن على فلوسك')">💸 الفلوس</div>
         <div class="gate-btn" onclick="enter('rituals', 'هتحور؟')">🕯️ الأوراد</div>
         <div class="gate-btn" onclick="enter('basa', 'فورمة الساحل')">⚔️ البأس</div>
-        <div class="gate-btn" onclick="enter('study', 'الدحيح')">📖 المطالعات</div>
-        <div class="gate-btn" onclick="enter('logs', 'ما قيل في الأثر')">📜 الوقائع</div>
     </div>
 </div>
 
 <header>
     <div onclick="exit()" style="font-size: 2rem; cursor: pointer;">🏠</div>
-    <h1 id="htitle">ما تقوم تتطمن على فلوسك</h1>
-    <div></div>
+    <h1 id="htitle">الفلوس</h1>
+    <div id="audit-icon"></div>
 </header>
 
 <main>
-    <section id="treasury" class="tab-content">
-        <div class="card">
-            <div style="text-align: center; opacity: 0.7;">معاك كام يا وحش؟</div>
-            <div id="balance" class="balance-text">0.00</div>
+    <section id="treasury">
+        <div class="card" style="border-color: var(--money-green);">
+            <h3 style="margin-top:0; color: var(--money-green);">العدّة اللي معاك فعلياً</h3>
+            <div style="display: flex; gap: 10px;">
+                <input type="number" id="cash-pocket" placeholder="في جيبك" oninput="doAudit()">
+                <input type="number" id="cash-bank" placeholder="في البنك" oninput="doAudit()">
+            </div>
+        </div>
+
+        <div id="timor-alert" class="audit-alert">
+            <h2 style="margin:0;">أنا مش حرامي يا تيمور! 😲</h2>
+            <p id="discrepancy-msg">فيه فرق ضايع وقدره: 0</p>
+            <button onclick="adjustBalance()" style="background: white; border: none; padding: 10px; border-radius: 10px; font-weight: bold;">أنا اللي صرفتهم ونسيت (تعديل)</button>
         </div>
 
         <div class="card">
-            <h2 style="margin-top:0;">حساباتك يا تيمور</h2>
-            <input type="number" id="amt" placeholder="كام؟" inputmode="decimal">
-            <input type="text" id="note" placeholder="صرفته في إيه؟">
-            <select id="type">
-                <option value="in">💰 الرزق يحب الخفية (دخل)</option>
-                <option value="out">💸 طيرت الفلوس (صرف)</option>
+            <div style="text-align: center; opacity: 0.7;">المفروض يكون معاك (حسب السجل):</div>
+            <div id="expected-balance" style="font-size: 3rem; color: var(--neon-blue); text-align: center; font-weight: bold;">0.00</div>
+        </div>
+
+        <div class="card">
+            <input type="number" id="amt" placeholder="المبلغ">
+            <input type="text" id="note" placeholder="البيان (صرفته في إيه؟)">
+            <select id="type" style="width:100%; padding:15px; border-radius:12px; background:#222; color:#fff;">
+                <option value="in">💰 دخل (رزق)</option>
+                <option value="out">💸 صرف (طيرتهم)</option>
             </select>
-            <button class="btn-add" onclick="save()">قيد المعاملة</button>
+            <button onclick="saveEntry()" style="width:100%; padding:20px; margin-top:15px; border-radius:15px; background:var(--neon-blue); font-weight:bold; font-size:1.2rem;">تثبيت</button>
         </div>
 
-        <h3 style="margin: 20px 0;">أنا مش حرامي يا تيمور (السجل)</h3>
         <div id="list"></div>
     </section>
-
-    <section id="rituals" class="tab-content" style="display:none;"><h1>هتحور؟</h1></section>
-    <section id="basa" class="tab-content" style="display:none;"><h1>فورمة الساحل</h1></section>
 </main>
 
 <nav>
-    <div class="nav-item active" onclick="tab('treasury', 'تطمن على فلوسك', this)"><span>💸</span>الفلوس</div>
-    <div class="nav-item" onclick="tab('rituals', 'هتحور؟', this)"><span>🕯️</span>الأوراد</div>
-    <div class="nav-item" onclick="tab('basa', 'فورمة الساحل', this)"><span>⚔️</span>البأس</div>
-    <div class="nav-item" onclick="tab('study', 'الدحيح', this)"><span>📖</span>المطالعات</div>
-    <div class="nav-item" onclick="tab('logs', 'الوقائع', this)"><span>📜</span>الوقائع</div>
+    <div class="nav-item active"><span>💸</span>الفلوس</div>
+    <div class="nav-item"><span>🕯️</span>الأوراد</div>
+    <div class="nav-item"><span>⚔️</span>البأس</div>
+    <div class="nav-item"><span>📖</span>الدحيح</div>
+    <div class="nav-item"><span>📜</span>الأثر</div>
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('meme_app_v2.6')) || [];
+    let db = JSON.parse(localStorage.getItem('meme_audit_v2.7')) || [];
 
     function enter(id, title) {
         document.getElementById('home-gate').classList.add('hidden');
-        tab(id, title);
-    }
-
-    function exit() {
-        document.getElementById('home-gate').classList.remove('hidden');
-    }
-
-    function tab(id, title, el) {
-        document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-        const target = document.getElementById(id);
-        if(target) target.style.display = 'block';
         document.getElementById('htitle').innerText = title;
-        if(el) {
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-        }
-        if(id === 'treasury') refresh();
+        refresh();
     }
 
-    function save() {
+    function exit() { document.getElementById('home-gate').classList.remove('hidden'); }
+
+    function saveEntry() {
         const val = parseFloat(document.getElementById('amt').value);
         if(!val) return;
         db.unshift({
             v: val,
             t: document.getElementById('type').value,
             n: document.getElementById('note').value || "حاجة كدة",
-            d: new Date().toLocaleDateString('ar-EG')
+            d: new Date().getTime()
         });
-        localStorage.setItem('meme_app_v2.6', JSON.stringify(db));
+        localStorage.setItem('meme_audit_v2.7', JSON.stringify(db));
         document.getElementById('amt').value = '';
         refresh();
     }
 
     function refresh() {
+        let expected = 0;
         const list = document.getElementById('list');
         list.innerHTML = '';
-        let total = 0;
         db.forEach(i => {
-            total += (i.t === 'in' ? i.v : -i.v);
+            expected += (i.t === 'in' ? i.v : -i.v);
             const row = document.createElement('div');
             row.className = 'ledger-row';
-            row.innerHTML = `<span>${i.n}</span><span style="color:${i.t === 'in' ? 'var(--money-green)' : 'var(--hot-pink)'}">${i.t === 'in' ? '+' : '-'}${i.v}</span>`;
+            row.innerHTML = `<span>${i.n}</span><span style="color:${i.t === 'in' ? 'var(--money-green)' : 'var(--hot-pink)'}">${i.v}</span>`;
             list.appendChild(row);
         });
-        document.getElementById('balance').innerText = total.toFixed(2);
+        document.getElementById('expected-balance').innerText = expected.toFixed(2);
+        window.currentExpected = expected;
+        doAudit();
     }
+
+    function doAudit() {
+        const pocket = parseFloat(document.getElementById('cash-pocket').value) || 0;
+        const bank = parseFloat(document.getElementById('cash-bank').value) || 0;
+        const actualTotal = pocket + bank;
+        const expected = window.currentExpected || 0;
+        const diff = actualTotal - expected;
+
+        const alertBox = document.getElementById('timor-alert');
+        if (actualTotal > 0 && Math.abs(diff) > 0.1) {
+            alertBox.style.display = 'flex';
+            document.getElementById('discrepancy-msg').innerText = `فيه فرق: ${diff.toFixed(2)} جنيه (يا إما ناسي دخل يا ناسي صرف)`;
+        } else {
+            alertBox.style.display = 'none';
+        }
+    }
+
+    function adjustBalance() {
+        const pocket = parseFloat(document.getElementById('cash-pocket').value) || 0;
+        const bank = parseFloat(document.getElementById('cash-bank').value) || 0;
+        const diff = (pocket + bank) - window.currentExpected;
+        
+        db.unshift({
+            v: Math.abs(diff),
+            t: diff > 0 ? 'in' : 'out',
+            n: "تعديل جرد (أنا مش حرامي يا تيمور)",
+            d: new Date().getTime()
+        });
+        localStorage.setItem('meme_audit_v2.7', JSON.stringify(db));
+        refresh();
+    }
+
     refresh();
 </script>
 </body>
